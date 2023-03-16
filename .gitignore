@@ -48,6 +48,6 @@ bin/
 .settings.gradle
 .gradle
 .idea
-/src/test
-/src/main
+AlgorithmPractice.iml
+../src/*
 
