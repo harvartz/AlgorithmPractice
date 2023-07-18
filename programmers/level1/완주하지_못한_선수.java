@@ -1,7 +1,7 @@
 import javax.sound.midi.Patch;
 import java.util.*;
 
-public class Main {
+public class 완주하지_못한_선수 {
    public static void main(String []args){
       String[] participant = {"leo", "kiki", "eden"};
       String[] completion = {"eden", "kiki"};

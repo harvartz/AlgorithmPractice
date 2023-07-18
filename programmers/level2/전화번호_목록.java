@@ -1,7 +1,7 @@
 import javax.sound.midi.Patch;
 import java.util.*;
 
-public class Main {
+public class 전화번호_목록 {
    public static void main(String []args){
       String[] input = {"119", "97674223", "1195524421"};
 

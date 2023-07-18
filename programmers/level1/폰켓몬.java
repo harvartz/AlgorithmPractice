@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class 폰켓몬 {
    public static void main(String []args){
       
       int[] num = {3,3,2,4,5};

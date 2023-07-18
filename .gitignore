@@ -50,4 +50,5 @@ bin/
 .idea
 AlgorithmPractice.iml
 ../src/*
+src
 
