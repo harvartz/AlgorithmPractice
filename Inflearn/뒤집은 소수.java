@@ -34,8 +34,11 @@ class Main {
             int tmp = answer[i];
             int res = 0;
             while (tmp > 0) {
+                // t는 마지막 수를 구해서 뒤에서 붙이려고 준비한 변수
                 int t = tmp % 10;
+                // res는 이전에 나온 숫자에 10을 곱하고 위에서 나온 t를 더해줘서 숫자를 바꿔준다.
                 res = res * 10 + t;
+                // 10을 나눠서 기존의 수에서 하나씩 줄여나간다.
                 tmp = tmp / 10;
             }
             if (isPrime(res)) arr.add(res);
