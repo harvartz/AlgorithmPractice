@@ -5,7 +5,9 @@ import java.util.*;
 class Main {
     /*
      * 2583_영역구하기
-     * https://www.acmicpc.net/problem/2583*/
+     * https://www.acmicpc.net/problem/2583
+     * 모눈종이의 좌표형태라서 인덱스를 어떻게 설정해야 하는지 고민했지만
+     * 그냥 배열의 전체범위와 입력받은 좌표의 범위를 1씩 뺴주면 일반 배열 형태와 동일하게 된다*/
 
     static int[][] map;
     static int m, n, k;
