@@ -4,7 +4,7 @@ import java.io.*;
 class Main {
 
     /*
-     * boj_1753 : https://www.acmicpc.net/problem/1753
+     * boj_1535 : https://www.acmicpc.net/problem/1535
      * */
 
     public static void main(String[] args) throws Exception {
