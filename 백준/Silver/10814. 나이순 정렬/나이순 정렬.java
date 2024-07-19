@@ -2,38 +2,35 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-
-    static class User {
-        int age;
-        String name;
-        int createdNum;
-    }
+    /*
+     * 문제: 나이순 정렬
+     * 해결 방법: 정렬을 사용하여 푼다
+     * 1. Arrays.sort(arr, (o1, o2) -> {Integer.compare(Integer.parseInt(o1[0]), Integer.parseInt(o2[0]))})
+     * - Integer.compare -> 두 정수를 비교하여 -1, 0, 1중 하나를 반환
+     * - 아래의 방법은 매우 큰 정수 값을 다룰 때는 오버 플로우가 발생할 수 있다. 이 부분이 더 안전하다.
+     * 2. Arrays.sort(users, (o1, o2) -> Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]));
+     * - 두 정수의 차이를 반환
+     * */
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        User[] arr = new User[N];
-        StringTokenizer st = null;
-
+        String[][] arr = new String[N][2];
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            arr[i] = new User();
-            arr[i].age = Integer.parseInt(st.nextToken());
-            arr[i].name = st.nextToken();
-            arr[i].createdNum = i;
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+            arr[i][0] = st.nextToken();
+            arr[i][1] = st.nextToken();
         }
-
-        // 숫자를 문자열로 받은 경우, int형으로 알아서 형변환이 가능할까?
         Arrays.sort(arr, (o1, o2) -> {
-            if (o1.age == o2.age) {
-                return Integer.compare(o1.createdNum, o2.createdNum);
-            }
-            return Integer.compare(o1.age, o2.age);
+            // 클래스를 만들어도 되지만 이렇게 바로 형변환을 하면 메모리를 절약하면서 풀 수 있다.
+            return Integer.compare(Integer.parseInt(o1[0]), Integer.parseInt(o2[0]));
         });
 
-        for (User i : arr) {
-            System.out.println(i.age + " " + i.name);
+        StringBuilder sb = new StringBuilder();
+        for (String[] user : arr) {
+            sb.append(user[0]).append(" ").append(user[1]).append("\n");
         }
+        System.out.print(sb);
     }
 }
