@@ -1,9 +1,8 @@
 import java.util.*;
 import java.io.*;
 
-// 그래프와 트리의 차이점?
-// 트리 순회는 다른 방법이 있었나?
-// 1. wires를 양방향 그래프로 만든다.
+// 문제를 잘 확인할 것: 분할한 전력망 네트워크는 트리여야 한다는 조건은 없다.
+// 또한, 트리는 단일 노드로 이루어진 트리라는 개념도 존재한다.
 
 class Solution {
     static int[][] map;
@@ -20,7 +19,7 @@ class Solution {
         nodeSize = n;
         degreeSize = wires.length;
                 
-        // 1. 양방향 그래프 만들기
+        // 트리는 무방향(양방향 그래프)
         for(int i = 0; i< degreeSize ; i++){
             int aNode = wires[i][0] - 1;
             int bNode = wires[i][1] - 1;
@@ -38,15 +37,18 @@ class Solution {
 
             int aNode = wires[i][0] - 1;
             int bNode = wires[i][1] - 1;
-            System.out.println("aNode: " + aNode + ", bNode: " + bNode);
             
             map[aNode][bNode] = 0;
             map[bNode][aNode] = 0;
             
             dfs(0);
-        
-            answer = Math.min(answer, Math.abs(aCount - (n - aCount)));
             
+            // 분할한 네트워크는 두 개뿐이기 때문에 한번만 순회하여, 전체 네트워크에서 현재 순회한 네트워크 수를 빼준다.
+            bCount = n - aCount;
+            answer = Math.min(answer, Math.abs(aCount - bCount)); 
+            // 절대 값이 작은 값으로 갱신한다. (두 네트워크의 차이를 제일 적게 한다.)
+            
+            // 다시 연결해놓는다.
             map[aNode][bNode] = 1;
             map[bNode][aNode] = 1;
         }
@@ -56,7 +58,6 @@ class Solution {
     public void dfs(int start){
         visited[start] = true;
         aCount++;
-
         for(int i = 0; i < nodeSize; i++){
             if(!visited[i] && map[start][i] == 1){
                 dfs(i);
