@@ -107,16 +107,16 @@ class Solution {
         
         while(!m_queue.isEmpty() && bStop==false)
         {
-            int size = m_queue.size();
+            //int size = m_queue.size();
             res++;
-            for(int i=0; i<size; i++)   
+            //for(int i=0; i<size; i++)   
             {
                 // map의 현재 위치에서 이동 가능한 항목을 모두 큐에 넣어준다.
                 Point pt = m_queue.poll();
                 
                 if(itemX*2 == pt.x && itemY*2 == pt.y)
                 {
-                    answer=res/2;
+                    //answer=res/2;
                     bStop = true;
                     break;
                 }
@@ -198,7 +198,7 @@ class Solution {
             System.out.println();
         }
         
-        
+        answer=res/4;
         return answer;
     }
 }
