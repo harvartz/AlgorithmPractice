@@ -1,34 +1,23 @@
 class Solution {
-    static int N = 0;
-	static int C = 0;
-	
-	static void subs(int cnt, int res, int [] numbers, int target)
-	{
-		if(cnt == N) // 종료조건
-		{
-			if(res == target)
-			{
-				C++;
-			}
-			
-			return;
-		}
-		
-		// 더한 경우
-		subs(cnt+1, res+numbers[cnt], numbers, target);
-		
-		// 뺀 경우
-		subs(cnt+1, res-numbers[cnt], numbers, target);
-	}
-    
+    int count = 0;
     public int solution(int[] numbers, int target) {
         int answer = 0;
+        dfs(numbers, 0, target, 0);
+        answer = count;
+        return count;
+    }
+    
+    public void dfs(int[] numbers, int level, int target, int result){
+        if(level == numbers.length){
+            if(target == result){
+                count++;
+            }
+            return;
+        }
+        int plus = result + numbers[level];
+        int minus = result - numbers[level];
         
-		N = numbers.length;
-        subs(0,0,numbers,target);
-        
-        answer = C;
-        
-        return answer;
+        dfs(numbers, level+1, target, plus);
+        dfs(numbers, level+1, target, minus);
     }
 }
