@@ -1,95 +1,58 @@
 import java.util.*;
 
 class Solution {
-    static class Point
-	{
-		int x; // 2차원 배열에서는 열에 해당
-		int y; // 2차원 배열에서는 행에 해당
-		
-		Point(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
-	}
-	
-	static int n;
-	static int m;
-	
-	static int [] move_y = {-1,1,0,0} ; // 행 이동에 사용 (상,하,좌,우)
-	static int [] move_x = {0,0,-1,1} ; // 열 이동에 사용 (상,하,좌,우)
-	
-	static boolean [][] visited; // 방문처리에 사용할 배열
+    int n;
+    int m;
+    int count = 0;
+    int[][] dist;
+    Queue<int[]> qu = new LinkedList<>();
+    int[] dx = {-1, 0, 1, 0};
+    int[] dy = {0, -1, 0, 1};
+    
     public int solution(int[][] maps) {
+        // 1. 변수 초기 세팅
         n = maps.length;
-		m = maps[0].length;
-		
-		visited = new boolean[n+1][m+1];
-		
-		int answer = 0;
-		boolean bStop = false; // 상대팀 진영에 도착했는지를 판단하는 변수 (도착한 경우 true로 변경)
-		
-		ArrayDeque<Point> q = new ArrayDeque<>();
-		q.add(new Point(1,1)); // 1,1에서 캐릭터 위치 시작
-		
-		while(!q.isEmpty())
-		{
-			int q_size = q.size();
-			
-			for(int size=0; size<q_size; size++)
-			{
-				Point cur_point = q.poll();
-				
-                if(visited[cur_point.y][cur_point.x])
-				{
-					continue;
-				}
-				else
-				{
-					visited[cur_point.y][cur_point.x] = true;
-				}
-				
-				if(cur_point.x == m && cur_point.y == n)
-				{
-					bStop = true;
-					break;
-				}
-				
-				for(int a=0; a<4; a++)
-				{
-					// 현재 위치에서 이동 가능한 지점 계산
-					int new_x = cur_point.x + move_x[a];
-					int new_y = cur_point.y + move_y[a];
-					
-					// 계산된 위치가 유효범위 내에 있는지 확인
-					if(new_x>=1 && new_x<= m && new_y>=1 && new_y<= n)
-					{
-						// 방문하지 않았던 위치인지 확인
-						if(visited[new_y][new_x] == false)
-						{
-							// 벽이 있는자리가 아닌지 확인
-							if(maps[new_y-1][new_x-1] == 1)
-							{
-								q.add(new Point(new_x,new_y)); // 모든 조건을 만족하면 큐에 담아준다
-							}
-						}
-					}
-				}
-			}
-			
-			answer++;
-			
-			if(bStop == true) // 상대 팀 진영에 도착한 경우, 반복문 종료
-			{
-				break;
-			}
-		}
-		
-		if(bStop == false) // 도착하지 못한 경우는 answer 값을 -1로 설정
-		{
-			answer = -1;
-		}
-		
-		return answer;
+        m = maps[0].length;
+        System.out.println("n: " + n +", m:" + m);
+        dist = new int[n][m];
+        
+        dfs(0, 0, maps);
+        
+        // for(int x = 0; x<n; x++){
+        //     for(int y = 0; y<m; y++){
+        //         System.out.print(dist[x][y] + "  ");
+        //     }
+        //     System.out.println();
+        // }
+        
+        if(dist[n-1][m-1] == 0) return -1;
+        int answer = dist[n-1][m-1];
+        return answer;
     }
+    
+    public void dfs(int x, int y, int[][] maps){
+        dist[x][y] = 1;
+        qu.offer(new int[]{x, y});
+        
+        while(!qu.isEmpty()){
+            int[] now = qu.poll();
+            for(int i = 0; i < 4; i++){
+                int d_x = now[0] + dx[i];
+                int d_y = now[1] + dy[i];
+                
+                if(0 <= d_x && d_x < n && 0 <= d_y && d_y < m){
+                    if(dist[d_x][d_y] == 0 && maps[d_x][d_y] == 1){
+                        dist[d_x][d_y] = dist[now[0]][now[1]] + 1;
+                        if(d_x == n-1 && d_y == m-1 ) {
+                            return;
+                        }
+                        int[] in = new int[]{d_x, d_y};
+                        qu.offer(in);
+                    }
+                }
+            }
+        }
+        
+        
+   }
 }
