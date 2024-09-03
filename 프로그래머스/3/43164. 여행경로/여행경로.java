@@ -1,91 +1,41 @@
 import java.util.*;
+import java.io.*;
+
+// 특징 1. 주어진 모든 항공권을 이용해야 한다.
+// 특징 2. 만일 가능한 경로가 2개 이상일 경우 알파벳 순서가 앞서는 경로를 return 한다
+// 방법 1. 정렬을 먼저 하면 처리가 되는가?
+// 방법 2. 도착지를 뽑을 때, 그때마다 다른 도착지의 배열을 정렬해서 뽑으면 되는건가
+
+// ICN이 맨 앞에 안올수가 있나?
+
+
 class Solution {
-    static class Ticket 
-    {
-        String start;
-        String end;
-        int idx;
-        
-        Ticket(String start, String end, int idx)
-        {
-            this.start = start;
-            this.end = end;
-            this.idx = idx;
-        }
-    }
-    
-    static int idx;
-    static int ticket_cnt; // 티켓 개수
-    static int [] visited;
-    static List <Ticket> res;
-    static int find_ticket(String start, String[][] tickets)
-    {
-        int tmp_chk = 0; // 다음에 탐색할 수 있는 항목이 있는지 체크
-        
-        for(int i=0; i<ticket_cnt; i++)
-        {
-            if(visited[i] == 0)
-            {
-                if(start.equals(tickets[i][0]))
-                {
-                    res.add(new Ticket(tickets[i][0],tickets[i][1],i));
-                    visited[i] = 1;
-                    tmp_chk++;
-                    idx++;
-                    
-                    // 해당 경로를 선택한 경우, 다음 경로를 선택할 수 없는 경우
-                    if(find_ticket(tickets[i][1], tickets) ==1)
-                    {
-                        // 마지막에 추가된 항목 삭제 및 관련 정보 초기화 처리
-                        Ticket prev = res.get(res.size()-1);
-                        visited[prev.idx] = 0;
-                        res.remove(prev);
-                        idx--;
-                        tmp_chk--;
-                    }
-                }
-            }
-        }
-        
-        if(tmp_chk == 0 && idx < ticket_cnt)
-        {
-            return 1;
-        }
-        
-        return 0;
-    }
-    
+    boolean[] visited;
+    ArrayList<String> result = new ArrayList<>();
     
     public String[] solution(String[][] tickets) {
+        visited = new boolean[tickets.length];
         
-        idx=0;
-        ticket_cnt = tickets.length;
+        dfs(0, "ICN", "ICN", tickets);
+        Collections.sort(result);
         
-        visited = new int[ticket_cnt];
-        
-        res = new LinkedList<>();
-        
-        // 2차원 배열 정렬 
-        Arrays.sort(tickets, new Comparator<String[]>() {
-            public int compare(String[] o1, String[] o2) {
-                if(o1[0].toString().contentEquals(o2[0].toString()))
-                    return o1[1].toString().compareTo(o2[1].toString());
-                else
-                    return o1[0].toString().compareTo(o2[0].toString());
-            }			
-        });
-        
-        find_ticket("ICN", tickets);
-        
-        String[] answer = new String[res.size()+1];
-        int answer_idx = 0;
-        for(Ticket value : res)
-        {
-            answer[answer_idx] = value.start;
-            answer_idx++;
-        }
-        answer[answer_idx] = res.get(res.size()-1).end;
-        
+        String[] answer = result.get(0).split(" ");
         return answer;
+       
+    }
+    
+    public void dfs(int depth, String start, String route, String[][] tickets){
+        // 1. 탈출 조건
+        if(depth == tickets.length){
+            result.add(route);
+            return;
+        }
+        for(int i = 0; i<tickets.length; i++){
+            if(tickets[i][0].equals(start) && !visited[i]){
+                visited[i] = true;
+                dfs(depth + 1, tickets[i][1], route + " "  + tickets[i][1], tickets);
+                visited[i] = false;
+            }
+        }
     }
 }
