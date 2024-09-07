@@ -1,67 +1,53 @@
-import java.util.*;
-import java.io.*;
-
-// 문제를 잘 확인할 것: 분할한 전력망 네트워크는 트리여야 한다는 조건은 없다.
-// 또한, 트리는 단일 노드로 이루어진 트리라는 개념도 존재한다.
-
 class Solution {
-    static int[][] map;
-    static boolean[] visited;
-    static int aCount;
-    static int bCount;
-    static int nodeSize;
-    static int degreeSize;
-    
+    int[][] graph;
+    boolean[] visited;
+    int aCount;
+
     public int solution(int n, int[][] wires) {
+        graph = new int[n][n];
         int answer = Integer.MAX_VALUE;
-        visited = new boolean[n];
-        map = new int[n][n];
-        nodeSize = n;
-        degreeSize = wires.length;
-                
-        // 트리는 무방향(양방향 그래프)
-        for(int i = 0; i< degreeSize ; i++){
-            int aNode = wires[i][0] - 1;
-            int bNode = wires[i][1] - 1;
-            map[aNode][bNode] = 1;
-            map[bNode][aNode] = 1;
+        
+        // 그래프 초기화
+        for (int i = 0; i < wires.length; i++) {
+            int start = wires[i][0] - 1;
+            int end = wires[i][1] - 1;
+            graph[start][end] = 1;
+            graph[end][start] = 1;
         }
 
-        // 2. DFS 순회 - 끊기고 나서도 순회를 해야하기 때문에 전체 반복문을 돌린다.
-        // 연결을 한번씩 끊으면서 두 그래프가 비슷하게 나와야 한다.
-        // 단, 끊었을 때 노드가 하나만 있으면 안된다. 트리는 부모 - 자식 간의 관계
-        for(int i = 0; i < degreeSize; i++){
-            // 두 노드의 연결이 끊겼을 때, 두 그래프를 count한다
-            aCount = 0;
-            visited = new boolean[nodeSize];
+        // 모든 간선을 하나씩 끊어서 시도
+        for (int i = 0; i < wires.length; i++) {
+            int start = wires[i][0] - 1;
+            int end = wires[i][1] - 1;
+            graph[start][end] = 0;  // 간선을 끊음
+            graph[end][start] = 0;
 
-            int aNode = wires[i][0] - 1;
-            int bNode = wires[i][1] - 1;
+            visited = new boolean[n];
+            aCount = 0;
             
-            map[aNode][bNode] = 0;
-            map[bNode][aNode] = 0;
+            // 0번 노드부터 시작해서 탐색 (연결된 노드 개수 세기)
+            dfs(0, n);
+            int bCount = n - aCount; // 다른 그룹의 노드 개수
             
-            dfs(0);
-            
-            // 분할한 네트워크는 두 개뿐이기 때문에 한번만 순회하여, 전체 네트워크에서 현재 순회한 네트워크 수를 빼준다.
-            bCount = n - aCount;
-            answer = Math.min(answer, Math.abs(aCount - bCount)); 
-            // 절대 값이 작은 값으로 갱신한다. (두 네트워크의 차이를 제일 적게 한다.)
-            
-            // 다시 연결해놓는다.
-            map[aNode][bNode] = 1;
-            map[bNode][aNode] = 1;
+            // 두 그룹의 차이를 최소화
+            answer = Math.min(answer, Math.abs(aCount - bCount));
+
+            // 끊은 간선 복구
+            graph[start][end] = 1;
+            graph[end][start] = 1;
         }
         return answer;
     }
-    
-    public void dfs(int start){
-        visited[start] = true;
+
+    // DFS로 연결된 노드 개수 세기
+    public void dfs(int now, int n) {
+        visited[now] = true;
         aCount++;
-        for(int i = 0; i < nodeSize; i++){
-            if(!visited[i] && map[start][i] == 1){
-                dfs(i);
-            }
+        
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && graph[now][i] == 1) {
+                dfs(i, n);
+            }            
         }
     }
 }
