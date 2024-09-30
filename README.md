@@ -5,3 +5,14 @@
 1. 백준
 2. 파이썬 기초
 3. 프로그래머스
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Array
+|  |
+| ------- |
+| [0026-remove-duplicates-from-sorted-array](https://github.com/harvartz/AlgorithmPractice/tree/master/0026-remove-duplicates-from-sorted-array) |
+## Two Pointers
+|  |
+| ------- |
+| [0026-remove-duplicates-from-sorted-array](https://github.com/harvartz/AlgorithmPractice/tree/master/0026-remove-duplicates-from-sorted-array) |
+<!---LeetCode Topics End-->
