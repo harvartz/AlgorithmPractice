@@ -6,7 +6,7 @@
 2. 파이썬 기초
 3. 프로그래머스
 <!---LeetCode Topics Start-->
-# LeetCode Topics
+# LeetCode Topics 
 ## Array
 |  |
 | ------- |
