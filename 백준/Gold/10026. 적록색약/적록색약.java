@@ -1,90 +1,80 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
-public class Main {
-    static char[][] pic;
-    static int[][] visited;
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, 1, 0, -1};
-    static Queue<Pair> qu;
+class Main {
 
     static int n;
+    static char[][] map;
+    static boolean[][] visited;
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, -1, 0, 1};
+    static int redGreen = 0;
+    static int entire = 0;
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
-        StringTokenizer st;
+        map = new char[n][n];
+        visited = new boolean[n][n];
 
-        pic = new char[n][n];
-        visited = new int[n][n];
-        qu = new LinkedList<>();
-
-
-        // 적록 색약이 아닌 경우,
-        for (int x = 0; x < n; x++) {
-            String str = br.readLine();
-            char[] split = str.toCharArray();
-            for (int y = 0; y < n; y++) {
-                pic[x][y] = split[y];
+        for (int i = 0; i < n; i++) {
+            String input = br.readLine();
+            for (int j = 0; j < n; j++) {
+                map[i][j] = input.charAt(j);
             }
         }
 
-        int count = 0;
-        bfs(count);
-
-        visited = new int[n][n];
-        qu = new LinkedList<>();
-        count = 0;
-
-        // 적록 색약인 경우
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
-                if (pic[x][y] == 'R') {
-                    pic[x][y] = 'G';
+        // 일반 영역 구하기
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j]) {
+                    bfs(i, j, map[i][j]);
+                    entire++;
                 }
             }
         }
-        bfs(count);
+
+        // 적록색약을 위해 'G'를 'R'로 변경
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (map[i][j] == 'G') {
+                    map[i][j] = 'R';
+                }
+            }
+        }
+        visited = new boolean[n][n];
+
+        // 적록색약 영역 구하기
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j]) {
+                    bfs(i, j, map[i][j]);
+                    redGreen++;
+                }
+            }
+        }
+
+        System.out.println(entire + " " + redGreen);
     }
 
-    static void bfs(int count) {
+    static void bfs(int x, int y, char color) {
+        Queue<int[]> qu = new LinkedList<>();
+        qu.add(new int[]{x, y});
+        visited[x][y] = true;
 
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
-                if (visited[x][y] == 1) continue;
-                qu.offer(new Pair(x, y));
-                visited[x][y] = 1;
+        while (!qu.isEmpty()) {
+            int[] cur = qu.poll();
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
 
-                while (!qu.isEmpty()) {
-                    Pair pair = qu.poll();
-
-                    for (int z = 0; z < 4; z++) {
-                        int d_x = pair.x + dx[z];
-                        int d_y = pair.y + dy[z];
-
-                        if (d_x < 0 || d_y < 0 || d_x >= n || d_y >= n) continue;
-                        if (pic[pair.x][pair.y] != pic[d_x][d_y] || visited[d_x][d_y] == 1) continue;
-                        visited[d_x][d_y] = 1;
-                        qu.offer(new Pair(d_x, d_y));
+                if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
+                    if (!visited[nx][ny] && map[nx][ny] == color) {
+                        visited[nx][ny] = true;
+                        qu.add(new int[]{nx, ny});
                     }
                 }
-                count++;
             }
-        }
-        System.out.println(count);
-    }
-
-
-    static class Pair {
-        int x;
-        int y;
-
-        public Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
         }
     }
 }
