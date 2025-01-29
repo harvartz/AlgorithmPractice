@@ -6,7 +6,6 @@ class Solution {
         Queue<Integer> queue = new LinkedList<>();
 
         for(int x = 0; x< progresses.length; x++){
-            // 정수를 나누기 전에 double로 캐스팅하여 소수점 이하를 유지
             queue.add((int)(Math.ceil((100.0-progresses[x])/speeds[x])));
         }
 
