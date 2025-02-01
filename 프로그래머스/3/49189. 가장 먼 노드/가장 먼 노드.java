@@ -1,16 +1,12 @@
 import java.util.*;
 
 class Solution {
-    // 1번 노드로부터 가장 멀리 떨어진 노드가 몇 개인지?
-    // 1번 노드로부터 각 노드까지의 거리 = dfs의 깊이, bfs의 무엇?
-    // 1번 노드로부터 각 노드까지의 최단 거리를 구하되, 
-    // 메모리 초과가 뜨는데 어디를 확인해야 하지?
+
     
     ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
     boolean[] visited;
     int[] dist;
     public int solution(int n, int[][] edge) {
-        // 초기화하기
         dist = new int[n];
         
         Arrays.fill(dist, -1);
@@ -19,7 +15,6 @@ class Solution {
             graph.add(new ArrayList<>());
         }
         
-        // 그래프 그리기
         for(int i = 0; i < edge.length; i++){
             int startNode = edge[i][0] - 1;
             int endNode = edge[i][1] - 1;
