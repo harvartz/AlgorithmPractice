@@ -1,73 +1,76 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-  static int n;
-  static int[][] map;
-  static boolean[] visit;
+class Main {
 
-  static int min = Integer.MAX_VALUE;
-  
-  public static void main(String[] args) throws Exception{
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer st = null;
+    static int N;
+    static int[][] arr;
+    static int[] b; // A팀의 선수들 저장
+    static int min = Integer.MAX_VALUE; // 최솟값을 구해야 하므로 Integer.MAX_VALUE로 설정
 
-    n = Integer.parseInt(br.readLine());
-    map = new int[n][n];
-    visit = new boolean[n];
-    
-    for(int i = 0; i<n; i++){
-      st = new StringTokenizer(br.readLine(), " ");
-      for(int j = 0; j<n; j++){
-        map[i][j] = Integer.parseInt(st.nextToken());
-      }
-    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    combi(0,0);
-    System.out.println(min);
-  }
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N][N];
+        b = new int[N / 2]; // A팀은 N/2명의 선수로 구성됨
 
-  // 조합
-  static void combi(int idx, int count){
-    // 절반이 되면 계산함
-    if(count == n/2){
-      diff();
-      return;
-    }
-    
-    for(int i = idx; i<n; i++){
-      if(!visit[i]){
-        visit[i] = true;
-        // 조합의 갯수를 하나 씩 늘려감
-        combi(i+1, count+1);
-        visit[i] = false;
-      }
-    }
-  }
-  
-  static void diff(){
-    int team_start = 0;
-    int team_link = 0;
-
-    for(int i = 0; i<n-1; i++){
-      for(int j = i+1; j<n; j++){
-        if(visit[i] == true && visit[j] == true){
-          team_start += map[i][j];
-          team_start += map[j][i];
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+            for (int j = 0; j < N; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
         }
-        else if(visit[i] == false && visit[j] == false){
-          team_link += map[i][j];
-          team_link += map[j][i];
+
+        // 조합으로 A팀 선수들을 선택
+        recur(0, 0);
+        System.out.println(min);
+    }
+
+    // 조합을 이용해 A팀(N/2명)을 구성하는 함수
+    static void recur(int start, int depth) {
+        if (depth == N / 2) {
+            diff();
+            return;
         }
-      }
-    }
-    int val = Math.abs(team_start - team_link);
 
-    if(val == 0){
-      System.out.println(val);
-      System.exit(0);
+        for (int i = start; i < N; i++) {
+            b[depth] = i; // A팀의 선수 추가
+            recur(i + 1, depth + 1);
+        }
     }
-    min = Math.min(val, min);
-  }
 
+    // A팀과 B팀의 차이를 계산하는 함수
+    static void diff() {
+        boolean[] isATeam = new boolean[N]; // A팀인지 여부를 저장하는 배열
+
+        // A팀의 선수들을 표시
+        for (int i = 0; i < N / 2; i++) {
+            isATeam[b[i]] = true;
+        }
+
+        int team_start = 0, team_link = 0;
+
+        for (int i = 0; i < N - 1; i++) {
+            for (int j = i + 1; j < N; j++) {
+                // A팀의 경우
+                if (isATeam[i] && isATeam[j]) {
+                    team_start += arr[i][j] + arr[j][i];
+                }
+                // B팀의 경우 (A팀이 아닌 경우)
+                else if (!isATeam[i] && !isATeam[j]) {
+                    team_link += arr[i][j] + arr[j][i];
+                }
+            }
+        }
+
+        int val = Math.abs(team_start - team_link);
+
+        if (val == 0) {
+            System.out.println(val);
+            System.exit(0);
+        }
+
+        min = Math.min(min, val);
+    }
 }
