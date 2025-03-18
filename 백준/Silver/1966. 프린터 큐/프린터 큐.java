@@ -30,7 +30,7 @@ public class Main {
  
 			int count = 0;	// 출력 횟수
 			
-			while (!q.isEmpty()) {	// 한 케이스에 대한 반복문
+			while (!q.isEmpty()) {
 				
 				int[] front = q.poll();	// 가장 첫 원소
 				boolean isMax = true;	// front 원소가 가장 큰 원소인지를 판단하는 변수
