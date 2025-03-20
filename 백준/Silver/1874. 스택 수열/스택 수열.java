@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
  
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -19,6 +17,7 @@ public class Main {
 			
 			int value = Integer.parseInt(br.readLine());
 			
+            // 처음보다 값이 더 커버리면
 			if(value > start) {
 				for(int i = start + 1; i <= value; i++) {
 					stack.push(i);
@@ -27,6 +26,7 @@ public class Main {
 				start = value; 	
 			}
 			
+            // 뽑은 값이 value 와 다를떄
 			else if(stack.peek() != value) {
 				System.out.println("NO");
 				return;	
