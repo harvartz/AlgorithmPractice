@@ -2,37 +2,52 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    private static int N;
-    private static int M;
-    private static int[] nums;
-    private static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] input = br.readLine().split(" ");
-        N = Integer.parseInt(input[0]);
-        M = Integer.parseInt(input[1]);
-        nums = new int[N];
-        input = br.readLine().split(" ");
-        for (int i = 0; i < N; i++) {
-            nums[i] = Integer.parseInt(input[i]);
-        }
-        Arrays.sort(nums);
-        dfs(0, new int[M]);
-        System.out.println(sb.toString());
-    }
+    // N과 M (4)
+    // 중복조합
+    // 비내림차순 - 오름차순 -> 그냥 점차 상승해야 한다.
 
-    private static void dfs(int depth, int[] answers) {
-        if (depth == M) {
+    static int N, M;
+    static int[] a, b;
+    // static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
+
+    static void perm(int level) {
+        if (level == M) {
             for (int i = 0; i < M; i++) {
-                sb.append(answers[i]).append(" ");
+                sb.append(b[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
+
         for (int i = 0; i < N; i++) {
-            answers[depth] = nums[i];
-            dfs(depth + 1, answers);
+            // if(visited[i]) continue;
+            // visited[i] = true;
+            b[level] = a[i];
+            perm(level + 1);
+            // visited[i] = false;
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        a = new int[N];
+        b = new int[M];
+        // visited = new boolean[N];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            a[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Arrays.sort(a);
+        perm(0);
+        System.out.print(sb);
     }
 }
