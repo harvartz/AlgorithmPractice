@@ -7,9 +7,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine()); // 테스트 �이스의 개수
+        int T = Integer.parseInt(br.readLine()); 
 
-        StringBuilder sb = new StringBuilder(); // 결과를 저장할 StringBuilder
+        StringBuilder sb = new StringBuilder(); 
 
         for (int t = 0; t < T; t++) {
             int n = Integer.parseInt(br.readLine()); // 정수 n
