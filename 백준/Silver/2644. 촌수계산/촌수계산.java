@@ -1,23 +1,25 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-
-    static Queue<Integer> qu = new LinkedList<>();
+class Main {
     static int N, M;
-    static int[][] family;
+    static int targetParent, targetChild;
     static boolean[] visited;
-    static int[] dist; // 목표위치로부터 탐색 노드까지의 거리를 나타내는 거리 배열
+    static Queue<int[]> qu = new LinkedList();
+    static int[][] map;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        family = new int[N][N];
+        map = new int[N][N];
         visited = new boolean[N];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int target_parent = Integer.parseInt(st.nextToken()) - 1;
-        int target_child = Integer.parseInt(st.nextToken()) - 1;
+        targetParent = Integer.parseInt(st.nextToken()) - 1;
+        targetChild = Integer.parseInt(st.nextToken()) - 1;
+
+        // System.out.println(targetParent);
+        // System.out.println(targetChild);
         M = Integer.parseInt(br.readLine());
 
         for (int i = 0; i < M; i++) {
@@ -25,28 +27,27 @@ public class Main {
             int parent = Integer.parseInt(st.nextToken()) - 1;
             int child = Integer.parseInt(st.nextToken()) - 1;
 
-            family[parent][child] = 1;
-            family[child][parent] = 1;
+            map[parent][child] = 1;
+            map[child][parent] = 1;
         }
 
-        qu.offer(target_parent);
-        dist = new int[N];
-        visited[target_parent] = true;
+        qu.offer(new int[] { targetParent, 0 });
 
-   
+        visited[targetParent] = true;
+
         while (!qu.isEmpty()) {
-            int now = qu.poll();
+            int[] now = qu.poll();
+            // System.out.println("now: " + now[0] + ", dist: " + now[1] + " ");
 
-            if (now == target_child) {
-                System.out.println(dist[now]);
+            if (now[0] == targetChild) {
+                System.out.println(now[1]);
                 return;
             }
 
             for (int i = 0; i < N; i++) {
-                if (family[now][i] == 1 && !visited[i]) {
+                if (!visited[i] && map[now[0]][i] == 1) {
                     visited[i] = true;
-                    dist[i] = dist[now] + 1;
-                    qu.offer(i);
+                    qu.offer(new int[] { i, now[1] + 1 });
                 }
             }
         }
